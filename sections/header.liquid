@@ -1,0 +1,139 @@
+<link rel="stylesheet" href="{{ 'header.css' | asset_url }}">
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <div class="site-header-logo-image">
+      {% if section.settings.image %}
+        <img src="{{ section.settings.image | file_url }}" alt="Logo">
+      {% else %}
+        <span class="site-header-logo">{{  section.settings.logo_heading}}</span>
+      {% endif %}
+    </div>
+    <div class="site-header-icons">
+      <a href="#" class="account" id="accountLink">
+        {% render 'account-icon.svg' %}
+      </a>
+      <a href="#" class="basket" id="basketLink">
+        {% render 'basket-icon.svg' %}
+        <span class="basket-quantity" id="basketQuantity">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+.site-header {
+ background: {{ section.settings.background_color }};
+}
+
+.site-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+}
+
+.site-header-logo {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: 20px;
+  color: #fff;
+  text-transform: uppercase;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.site-header-icons {
+  display: flex;
+  column-gap: 20px;
+}
+
+.basket {
+  position: relative;
+  display: inline-block;
+}
+
+.basket-quantity {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background: #68DD7C;
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+@media screen and (min-width: 989px) {
+  .site-header-inner {
+    padding: 12px 60px;
+  }
+}
+
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the basket link, cart drawer, and overlay elements
+  const basketLink = document.getElementById('basketLink');
+  const cartDrawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('cartOverlay'); // Ensure this is the correct ID for the overlay
+
+  // Check if cartDrawer and overlay exist before attaching the event listener
+  if (cartDrawer && overlay) {
+    // Ensure the cart drawer is closed on page load by removing the 'open' class
+    cartDrawer.classList.remove('open');
+    overlay.classList.remove('visible'); // Ensure overlay is also hidden on page load
+
+    // Event listener for basket link click
+    basketLink.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent the default link action
+      
+      // Toggle the 'open' class for the cart drawer
+      cartDrawer.classList.toggle('open');
+      
+      // Toggle the 'visible' class for the overlay
+      overlay.classList.toggle('visible'); // Add or remove the 'visible' class to show/hide the overlay
+    });
+  } else {
+    console.error('Cart drawer or overlay element not found.');
+  }
+});
+
+</script>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "section",
+  "class": "header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "logo_heading",
+      "label": "Logo heading"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#1E3563"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,360 @@
+<div id="cartOverlay"class="cart-drawer-overlay"></div>
+
+<div id="cartDrawer" class="cart-drawer">
+  <div class="cart-drawer-inner">
+    <div class="cart-drawer-header">
+      <h3>Your basket</h3>
+      <a href="#/clear" class="cart-drawer-header-clear">Clear all</a>
+    </div>
+    <div class="cart-drawer-items">    
+      {% assign mock_products = 
+        "Product Name,product1,Product Flavour,1000|
+        Product Name,product2,Product Flavour,1000|
+        Product Name,product3,Product Flavour,1000|
+        Product Name,product4,Product Flavour,1000|
+        Product Name,product5,Product Flavour,1000|
+        Product Name,product6,Product Flavour,1000|
+        Product Name,product7,Product Flavour,1000" | split: "|" 
+      %}  
+      {% for item in mock_products %}
+        {% assign product = item | split: "," %}
+        <div class="cart-drawer-item">
+          <div class="cart-drawer-item-inner">
+            <img src="{{ 'https://cdn.shopify.com/s/files/1/0898/9700/9536/files/PDP-IMAGERY-mint_1_4.png?v=1736951232' }}" alt="{{ product[0] }}">
+            <div class="cart-drawer-details">
+              <p class="product-name">{{ product[0] }}</p>
+              <p class="product-flavour">{{ product[2] }}</p>
+              </div>
+              <span>{% render 'bin-icon.svg' %}</span>
+          </div>
+          <div class="cart-drawer-cost-wrapper">
+            <p class="cart-drawer-price">{{ product[3] | money }}</p>
+            <div class="cart-drawer-cost-btns">
+              <button type="button" class="cart-drawer-quantity-btn cart-drawer-quantity-btn-minus" aria-label="Decrease quantity">
+                <img src="{{ 'minus-icon.svg' | asset_url }}" alt="Minus icon" class="quantity-btn-icon">
+              </button>
+              <input type="number" class="cart-drawer-quantity-input" value="0" min="1" aria-label="Quantity">
+              <button type="button" class="cart-drawer-quantity-btn cart-drawer-quantity-btn-plus" aria-label="Increase quantity">
+                <img src="{{ 'plus-icon.svg' | asset_url }}" alt="Plus icon" class="quantity-btn-icon">
+              </button>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p>No items in the cart.</p>
+      {% endfor %}
+    </div>
+    <div class="cart-drawer-footer">
+      <div class="cart-drawer-footer-inner">
+      <span class="cart-drawer-footer-amount">7 items</span>
+      <span class="cart-drawer-footer-total">€0.00</span>
+      </div>
+      <div class="cart-drawer-footer-promo">
+        <p>Earn 20 points with this order</p>
+      </div>
+      <a href="#" class="cart-drawer-footer-btn">Checkout now</a>
+    </div>
+  </div>
+</div>
+
+<style>
+
+  #cartDrawer {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    max-width: 320px;
+    width: 100%;
+    height: 100%;
+    background: rgba(233, 236, 240, 1);
+    border: 1px solid rgba(204, 208, 214, 1);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 99;
+    transform: translateX(100%);
+    transition: transform 6s ease-in-out;
+    overflow: scroll;
+  }
+
+  #cartDrawer.open {
+    display: block;
+    transform: translateX(0);
+    transition: transform 6s ease-in-out;
+  }
+
+  .cart-drawer-inner {
+    padding: 20px;
+  }
+
+  .cart-drawer-overlay {
+    display: none;
+  }
+
+  .cart-drawer-overlay.visible {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  .cart-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid #CCD0D6;
+    padding-bottom: 20px;
+  }
+
+  .cart-drawer-header h3 {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 33px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  .cart-drawer-header-clear {    
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 22px;
+    text-align: right;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: rgba(93, 95, 99, 1);
+  }
+
+  .cart-drawer-items {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    padding-top: 20px;
+    max-width: 280px;
+    width: 100%;
+  }
+
+  .product-name {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  .product-flavour {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: #5D5F63;
+  }
+
+  .cart-drawer-cost-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .cart-drawer-price {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 16px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  .cart-drawer-cost-btns {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+    justify-content: end;
+  }
+
+  .cart-drawer-cost-btns .cart-drawer-quantity-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    max-width: 28px;
+    width: 100%;
+    border-radius: 22px;
+    border: none;
+    cursor: pointer;
+  }
+
+   .cart-drawer-cost-btns .cart-drawer-quantity-btn img {
+    max-width: 12px;
+    width: 100%;
+  }
+
+  .cart-drawer-cost-btns .cart-drawer-quantity-input {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    max-width: 38.5px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #CCD0D6;
+    border-radius: 6px;
+  }
+
+  .cart-drawer-cost-btns input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+  }
+
+  .cart-drawer-item-inner {
+    display: flex;
+    gap: 8px;
+  }
+
+  .cart-drawer-item-inner span {
+    display: flex;
+    flex: 1;
+    justify-content: end;
+    padding-right: 7px;
+  }
+
+  .cart-drawer-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 6px;
+    background: #fff;
+  }
+
+  .cart-drawer-item img {
+    max-width: 40px;
+    width: 100%;
+    height: auto;
+  }
+
+  .cart-drawer-footer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    padding-top: 30px;
+  }
+
+  .cart-drawer-footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .cart-drawer-footer-amount {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  .cart-drawer-footer-total {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 33px;
+    text-align: right;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  .cart-drawer-footer-promo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 280px;
+    width: 100%;
+    background: linear-gradient(115.77deg, #FEC520 5.06%, #F89D31 53.6%, #F96D00 105.27%);
+    height: 33px;
+    border-radius: 6px;
+  }
+  .cart-drawer-footer-promo p {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 12px;
+    text-align: center;
+    padding: 8px;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+
+  .cart-drawer-footer-btn {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+    max-width: 280px;
+    width: 100%;
+    height: 44px;
+    border-radius: 44px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+  // Cart drawer functionality
+  var cartDrawer = document.getElementById('cartDrawer');
+  var overlay = document.querySelector('.cart-drawer-overlay');
+
+  overlay.addEventListener('click', function() {
+    cartDrawer.classList.remove('open');
+    overlay.classList.remove('visible');
+  });
+
+  // Get all the quantity containers (each product)
+  var quantityContainers = document.querySelectorAll('.cart-drawer-cost-btns');
+
+  // Loop through each quantity container
+  quantityContainers.forEach(function(container) {
+    // Get the minus button, plus button, and input field within the container
+    var minusButton = container.querySelector(".cart-drawer-quantity-btn-minus");
+    var plusButton = container.querySelector(".cart-drawer-quantity-btn-plus");
+    var quantityInput = container.querySelector(".cart-drawer-quantity-input");
+
+    // Set the initial value of the input to 0
+    quantityInput.value = 0;
+
+    // Add a click event listener to the minus button
+    minusButton.addEventListener("click", function() {
+      // Parse the current value of the input field, defaulting to 0 if it's invalid
+      var currentValue = Number(quantityInput.value) || 0;
+
+      // Decrease the value by 1, but ensure it doesn't go below 1
+      if (currentValue > 1) {
+        quantityInput.value = currentValue - 1;
+      }
+    });
+
+    // Add a click event listener to the plus button
+    plusButton.addEventListener("click", function() {
+      // Parse the current value of the input field, defaulting to 0 if it's invalid
+      var currentValue = Number(quantityInput.value) || 0;
+
+      // Increase the value by 1
+      quantityInput.value = currentValue + 1;
+    });
+  });
+});
+</script>

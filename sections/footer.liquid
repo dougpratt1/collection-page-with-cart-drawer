@@ -1,0 +1,196 @@
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="site-footer-left">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'logo' %}
+            <div class="site-footer-logo-image">
+              {% if block.settings.image %}
+                <img src="{{ block.settings.image | file_url }}" alt="Logo">
+              {% else %}
+                <span class="site-footer-logo">{{  block.settings.logo_heading}}</span>
+              {% endif %}
+            </div>
+          {% when 'text' %}
+            <div class="site-footer-text">
+              {{ block.settings.text }}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+    <div class="site-footer-right">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'menu_one' %}
+            <div class="site-footer-menu-wrapper">
+              <ul class="site-footer-menu">
+                {% for link in block.settings.menu_one.links %}
+                  <li class="site-footer-menu-item"><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% when 'menu_two' %}
+            <div class="site-footer-menu-wrapper">
+              <ul class="site-footer-menu">
+                {% for link in block.settings.menu_two.links %}
+                  <li class="site-footer-menu-item"><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</footer>
+
+<style>
+.site-footer {
+ background: {{ section.settings.background_color }};
+}
+
+.site-footer-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  row-gap: 20px;
+}
+
+.site-footer-logo {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: 20px;
+  text-transform: uppercase;
+  color: #fff;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.site-footer-text p {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+  color: #fff;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  max-width: 400px;
+  margin-bottom: 0;
+}
+
+.site-footer-right {
+  display: flex;
+  gap: 10px;
+  max-width: 344px;
+  width: 100%;
+}
+
+.site-footer-menu-wrapper {
+  flex: 1;
+}
+
+.site-footer-menu {
+  padding-left: 0;
+  margin: 0;
+}
+
+.site-footer-menu-item {
+  list-style-type: none;
+  display: flex;
+}
+
+.site-footer-menu-item a {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #fff;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+@media screen and (min-width: 989px) {
+  .site-footer-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 30px 60px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "class": "footer",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Footer"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#1E3563"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Logo",
+      "type": "logo",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Logo"
+        },
+        {
+          "type": "text",
+          "id": "logo_heading",
+          "label": "Logo heading"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "name": "Text",
+      "type": "text",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    },
+    {
+      "name": "Menu one",
+      "type": "menu_one",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu_one",
+          "label": "Menu one"
+        }
+      ]
+    },
+    {
+      "name": "Menu two",
+      "type": "menu_two",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu_two",
+          "label": "Menu two"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

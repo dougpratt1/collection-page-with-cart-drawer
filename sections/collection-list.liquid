@@ -1,0 +1,291 @@
+<section>
+  <h1 class="collection-heading">{{ section.settings.heading }}</h1>
+  <div class="products-container">
+    {% for collection in section.settings.collection %}
+      {% assign collection_handle = collection.handle %}
+      {% assign collection_object = collections[collection_handle] %}
+      {% if collection_object and collection_object.products.size > 0 %}
+        {% for product in collection_object.products %}
+          <div class="product-item">
+            {% assign product_tags = product.tags | join: ' ' | downcase %}
+            <div class="product-item-promos">
+              {% if product_tags contains 'new' %}
+                <div class="product-item-promos-inner">
+                  <span class="product-item-promo-tag">{%  render 'trophy.svg' %}New</span>
+                  {% if product_tags contains 'get x for y' %}
+                    <span class="product-item-promo-tag">{%  render 'tag.svg' %}Get X for Y</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+              <span class="product-item-wishlist">{% render 'heart.svg' %}</span>
+              </div>
+            <div class="product-item-img-wrapper">
+              <img src="{{ product.featured_image | img_url: 'master' }}" alt="{{ product.title }}" />
+            </div>
+            <div class="product-details">
+              <h3 class="product-details-title">{{ product.title }}</h3>
+              <div class="product-details-size">Size: {{ product.variants.first.option1 }}</div>
+              <div class="product-details-bottom">
+                <div class="product-details-quantity">
+                  <button type="button" class="quantity-btn quantity-btn--minus" aria-label="Decrease quantity">
+                    <img src="{{ 'minus-icon.svg' | asset_url }}" alt="Minus icon" class="quantity-btn-icon">
+                  </button>
+                  <input type="number" class="quantity-input" value="0" min="1" aria-label="Quantity">
+                  <button type="button" class="quantity-btn quantity-btn--plus" aria-label="Increase quantity">
+                    <img src="{{ 'plus-icon.svg' | asset_url }}" alt="Plus icon" class="quantity-btn-icon">
+                  </button>
+                </div>
+                <div class="product-details-price">{{ product.price | money }}</div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<style>
+  .collection-heading {
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 45px;
+  letter-spacing: -0.20000000298023224px;
+  padding: 30px 10px;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  text-align: center;
+}
+
+.products-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 24px;
+  padding: 20px;
+}
+
+.product-item {
+  padding: 20px;
+  box-shadow: 0px 0px 15px -2px #0000001A;
+  max-width: 353px;
+  width: 100%;
+}
+
+.product-item-promos {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.product-item-promos-inner {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+  color: #000000;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 12px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  padding-bottom: 20.5px;
+}
+
+.product-item-promo-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 6px 0;
+  border-radius: 6px;
+}
+
+.product-item-promo-tag:first-of-type {
+  background: #B2DAE0;
+  max-width: 71px;
+  width: 100%;
+}
+
+.product-item-promo-tag:nth-of-type(2) {
+  background: #FACDCE;
+  max-width: 109px;
+  width: 100%;
+}
+
+.product-item-img-wrapper img {
+  width: 100%;
+}
+
+.product-details-title {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  margin-bottom: 0;
+}
+
+.product-details-size {
+  padding-bottom: 20px;
+  color: #5D5F63;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.product-details-price {
+  color: #000000;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 26.4px;
+  text-align: right;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.product-details-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #DEDEDE;
+  padding-top: 20px;
+}
+
+.product-details-quantity {
+  display: flex;
+  flex: 1;
+  gap: 5px;
+}
+
+.quantity-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  max-width: 40px;
+  width: 100%;
+  border-radius: 22px;
+  border: none;
+  cursor: pointer;
+}
+
+.quantity-input {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  max-width: 38.5px;
+  width: 100%;
+  text-align: center;
+  border: 1px solid #CCD0D6;
+  border-radius: 6px;
+}
+
+.product-details-quantity input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+@media screen and (min-width: 698px) {
+  .products-container {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 32px 64px;
+  }
+  .product-item {
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .products-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+</style>
+
+<script>
+  // Wait until the DOM is fully loaded before running the script
+  document.addEventListener("DOMContentLoaded", function () {
+    // Select all containers that have quantity controls
+    var quantityContainers = document.querySelectorAll(".product-details-quantity");
+    var basketQuantityElement = document.getElementById("basketQuantity"); // Select the quantity badge element
+    var basketQuantity = 0; // Initialize basket quantity
+
+    // Function to update the basket icon quantity
+    function updateBasket() {
+      basketQuantityElement.textContent = basketQuantity; // Update the badge text
+    }
+
+    // Loop through each quantity container
+    quantityContainers.forEach(function (container) {
+      // Get the minus button, plus button, and input field within the container
+      var minusButton = container.querySelector(".quantity-btn--minus");
+      var plusButton = container.querySelector(".quantity-btn--plus");
+      var quantityInput = container.querySelector(".quantity-input");
+
+      // Set the initial value of the input to 0
+      quantityInput.value = 0;
+
+      // Add a click event listener to the minus button
+      minusButton.addEventListener("click", function () {
+        // Parse the current value of the input field, defaulting to 0 if it's invalid
+        var currentValue = Number(quantityInput.value) || 0;
+
+        // Decrease the value by 1, but ensure it doesn't go below 1
+        if (currentValue > 0) {
+          quantityInput.value = currentValue - 1;
+          basketQuantity -= 1; // Decrease basket quantity
+          updateBasket(); // Update the basket icon
+        }
+      });
+
+      // Add a click event listener to the plus button
+      plusButton.addEventListener("click", function () {
+        // Parse the current value of the input field, defaulting to 0 if it's invalid
+        var currentValue = Number(quantityInput.value) || 0;
+
+        // Increase the value by 1
+        quantityInput.value = currentValue + 1;
+        basketQuantity += 1; // Increase basket quantity
+        updateBasket(); // Update the basket icon
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Collection List",
+  "tag": "section",
+  "class": "collection-list",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collection list"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "collection_list",
+      "id": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection List"
+    }
+  ]
+}
+{% endschema %}
